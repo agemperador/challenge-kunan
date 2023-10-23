@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: PASSWORD_A_COMPLETAR
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: mysql
+    expose:
+      - 3309
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3309:3309"
+  app:
+    build: .
+    environment:
+      FLASK_APP: main.py
+      FLASK_ENV: development
+      APP_NAME: kunan
+    volumes:
+      - .:/app
+    links:
+      - db
+    expose:
+      - 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+volumes:
+  mysql-data:
